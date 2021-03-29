@@ -1,0 +1,14 @@
+# The TPU HAL looks for TPU instance in /dev/abrolhos
+allow hal_neuralnetworks_darwinn edgetpu_device:chr_file rw_file_perms;
+
+# Allow DawriNN service to use a client-provided fd residing in /vendor/etc/.
+allow hal_neuralnetworks_darwinn vendor_configs_file:file r_file_perms;
+
+# Allow DarwiNN service to access data files.
+allow hal_neuralnetworks_darwinn hal_neuralnetworks_darwinn_data_file:file create_file_perms;
+allow hal_neuralnetworks_darwinn hal_neuralnetworks_darwinn_data_file:dir rw_dir_perms;
+
+# Register to hwbinder service.
+# add_hwservice() is granted by hal_server_domain + hal_neuralnetworks.te
+hwbinder_use(hal_neuralnetworks_darwinn)
+get_prop(hal_neuralnetworks_darwinn, hwservicemanager_prop)
